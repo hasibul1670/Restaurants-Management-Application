@@ -28,16 +28,13 @@ const getSingleOrder = async (id: string) => {
 };
 
 const deleteOrder = async (id: string) => {
-  const result = await Order.findOneAndDelete({ id: id });
-
+  const result = await Order.findByIdAndDelete(id);
   return result;
 };
 const updateOrder = async (
   payload: Partial<IOrder>
 ): Promise<IOrder | null> => {
- 
   const { id } = payload;
-  console.log('Hello...........', id);
   const result = await Order.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
   });

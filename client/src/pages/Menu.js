@@ -104,7 +104,7 @@ const Menu = ({ table_No }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:4000/api/v1/orders/create-order",
+        "https://resturent-management-app.vercel.app/api/v1/orders/create-order",
         {
           method: "POST",
           headers: {
@@ -118,6 +118,7 @@ const Menu = ({ table_No }) => {
         throw new Error("Network response was not ok");
       }
       const newOrderData = await response.json();
+      console.log("Hello", newOrderData);
       if (newOrderData.statusCode === 200) {
         toast.success("Your order has been placed successfully");
         navigate("/cooking");
@@ -186,7 +187,7 @@ const Menu = ({ table_No }) => {
       </div>
 
       <div className="order">
-        <h2 className="heading">Order for Table {table_No}</h2>
+        <h2 className="heading">Order for Table {tableNo}</h2>
         <ul className="cart-list">
           {cartItems.map((item) => (
             <li key={item.id} className="cart-item">
@@ -201,9 +202,16 @@ const Menu = ({ table_No }) => {
 
         {orderSubmitted && <p>Order submitted successfully!</p>}
 
-        <button className="submit-button" onClick={() => handleSubmitOrder()}>
-          Submit Order
-        </button>
+        {cartItems.length > 0 ? (
+          <>
+            <button
+              className={`btn btn-info capitalize `}
+              onClick={() => handleSubmitOrder()}
+            >
+              Submit Order
+            </button>
+          </>
+        ) : null}
       </div>
     </div>
   );

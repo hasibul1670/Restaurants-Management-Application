@@ -1,48 +1,25 @@
 import { toast } from "react-hot-toast";
 
-import { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
-import Swal from "sweetalert2";
 import useOrders from "../../Hooks/useOrder";
 
 const CompletedOrder = () => {
   const email = localStorage.getItem("email");
   const [order, loading, refetch] = useOrders();
   const orderArray = order?.data;
-  const [selectedStatus, setSelectedStatus] = useState(""); 
-  const handleStatusChange = (status) => {
-    setSelectedStatus(status);
-  };
 
   const handleCartItemDelete = async (id) => {
-    fetch(
-      `https://summer-camp-school-server-sigma.vercel.app/api/v1/cart/${id}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`https://resturent-management-app.vercel.app/api/v1/orders/${id}`, {
+      method: "DELETE",
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode === 200) {
+          console.log('Hello',data);
           toast.success("Successfully  Deleted !");
+          refetch();
         }
       });
-  };
-  const data = null;
-
-  const handleEnroll = async () => {
-    const options = {
-      email: email,
-      enrolled: true,
-    };
-
-    Swal.fire({
-      position: "top-center",
-      icon: "success",
-      title: "Your selected orders successfully Enrolled!",
-      showConfirmButton: false,
-      timer: 2500,
-    });
   };
 
   const filteredData = orderArray?.filter(
@@ -53,13 +30,11 @@ const CompletedOrder = () => {
   const formattedData = filteredData?.map((order) => {
     const originalDateString = order.date;
     const originalDate = new Date(originalDateString);
-     formattedDate = originalDate.toISOString().slice(0, 10);
-  
-  })
+    formattedDate = originalDate.toISOString().slice(0, 10);
+  });
 
   return (
     <div className="flex flex-col w-full lg:flex-row">
-
       <div className="grid flex-grow justify-center h-96 card  b  rounded-box place-items-center  overflow-y-auto">
         <div className="container mx-auto w-full">
           <div className="grid  mt-4 md:grid-cols-2 lg:grid-cols-2  gap-5">
@@ -76,7 +51,7 @@ const CompletedOrder = () => {
                       </p>
                       <button
                         onClick={() => handleCartItemDelete(order?._id)}
-                        className="text-2xl text-blue-600 text btn-outline ml-10"
+                        className="text-2xl text-red-600 text btn-outline ml-10"
                       >
                         <AiFillDelete />
                       </button>
@@ -88,7 +63,7 @@ const CompletedOrder = () => {
                           Name: {item.name} <br />
                           Quantity: {item.quantity} <br />
                           Price : {item.price}
-                          </div>
+                        </div>
                       ))}
                     </h1>
                     <p className="font-semibold text-sm text-blue-700 ">
@@ -98,7 +73,7 @@ const CompletedOrder = () => {
                       Status: {order?.status}
                     </h1>
                     <p className="mb-2 text-xs font-semibold text-black">
-                      Time & Date: {order?.time}   @   {formattedDate} 
+                      Time & Date: {order?.time} @ {formattedDate}
                     </p>
                   </>
                 </div>

@@ -17,7 +17,7 @@ const ServedOrder = () => {
         id: id,
         status: status,
       };
-      const response = await fetch("http://localhost:4000/api/v1/orders", {
+      const response = await fetch("https://resturent-management-app.vercel.app/api/v1/orders", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
